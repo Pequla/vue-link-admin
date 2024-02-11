@@ -106,4 +106,16 @@ export class MainService {
     public static async deleteData(id: number) {
         return await this.useAxios('/data/' + id, 'delete')
     }
+
+    public static async getTokens() {
+        return await this.useAxios('/token')
+    }
+
+    public static async createToken() {
+        return await this.useAxios('/token', 'post')
+    }
+
+    public static async deleteToken(id: number) {
+        return await this.useAxios('/token/' + id, 'delete')
+    }
 }

@@ -12,6 +12,9 @@
                         <router-link class="nav-link" to="/">Home</router-link>
                     </li>
                     <li class="nav-item">
+                        <router-link class="nav-link" to="/token">Tokens</router-link>
+                    </li>
+                    <li class="nav-item">
                         <button class="nav-link" @click="logout">Logout</button>
                     </li>
                 </ul>

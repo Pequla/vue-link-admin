@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import DetailsView from '@/views/DetailsView.vue'
+import TokenView from '@/views/TokenView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/details/:id',
     name: 'details',
     component: DetailsView,
+  },
+  {
+    path: '/token',
+    name: 'token',
+    component: TokenView
   },
   {
     path: '/:catchAll(.*)',
