@@ -7,7 +7,7 @@
       </span>
       <input type="text" class="form-control" aria-describedby="search" @keyup="search" v-model="input">
     </div>
-    <table class="table table-stripped table-hover" v-if="data">
+    <table class="table table-stripped table-hover" v-if="data && bans">
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -18,7 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in data">
+        <tr v-for="item in filterData(data)">
           <th scope="row">{{ item.dataId }}</th>
           <td>{{ item.uuid }}</td>
           <td>{{ item.user.discordId }}</td>
@@ -53,7 +53,10 @@ import { MainService } from '@/utils/main.service';
 import { onMounted, ref } from 'vue';
 import { useLogout } from '@/hooks/logout.hook';
 import Loading from '@/components/Loading.vue';
+import { BanModel } from '@/models/ban.model';
+
 const data = ref<DataModel[]>()
+const bans = ref<BanModel[]>()
 let cached: undefined | DataModel[] = undefined
 const input = ref<string>()
 const logout = useLogout()
@@ -85,7 +88,7 @@ function ban(item: DataModel) {
   if (confirm('Are you sure you want to ban ' + item.user.discordId)) {
     let reason = prompt('Reason (can be empty) why are you banning ' + item.user.discordId)
     MainService.createBan(item.userId, reason)
-    .then(rsp => {
+      .then(rsp => {
         data.value = data.value?.filter(data => data.userId != rsp.data.userId)
         cached = cached?.filter(data => data.userId != rsp.data.userId)
       })
@@ -93,12 +96,21 @@ function ban(item: DataModel) {
   }
 }
 
-onMounted(() => {
-  MainService.getData()
-    .then(rsp => {
-      data.value = rsp.data
-      cached = rsp.data
-    })
-    .catch(e => logout())
+function filterData(data: DataModel[]) {
+  return data.filter(i => {
+    if (bans.value == undefined) return false
+    return !bans.value.map(b => b.userId).includes(i.userId)
+  })
+}
+
+onMounted(async () => {
+  try {
+    bans.value = (await MainService.getBans()).data
+    const rsp = await MainService.getData()
+    data.value = rsp.data
+    cached = rsp.data
+  } catch (e) {
+    logout()
+  }
 })
 </script>
