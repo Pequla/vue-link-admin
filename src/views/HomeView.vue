@@ -25,16 +25,17 @@
           <td>{{ new Date(item.createdAt).toLocaleString('sr') }}</td>
           <td>
             <div class="btn-group">
-              <router-link class="btn btn-sm btn-primary" :to="`/details/${item.dataId}`">
+              <router-link class="btn btn-sm btn-primary" :to="`/details/${item.dataId}`" title="Details">
                 <i class="fa-solid fa-circle-info"></i>
               </router-link>
-              <a class="btn btn-sm btn-success" :href="`https://datavue.pequla.com/user/${item.user.discordId}`">
+              <a class="btn btn-sm btn-success" :href="`https://datavue.pequla.com/user/${item.user.discordId}`"
+                target="_blank" title="Open in DataVue">
                 <i class="fa-solid fa-right-from-bracket"></i>
               </a>
-              <button class="btn btn-sm btn-secondary" @click="ban(item)">
+              <button class="btn btn-sm btn-secondary" @click="ban(item)" title="Ban the user">
                 <i class="fa-solid fa-gavel"></i>
               </button>
-              <button class="btn btn-sm btn-danger" @click="remove(item)">
+              <button class="btn btn-sm btn-danger" @click="remove(item)" title="Remove the link">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </div>

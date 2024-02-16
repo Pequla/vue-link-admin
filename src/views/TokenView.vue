@@ -30,7 +30,7 @@
                 <td>{{ (item.usedAt) ? new Date(item.usedAt).toLocaleString('sr') : 'N/A' }}</td>
                 <td>
                     <div class="btn-group">
-                        <button class="btn btn-sm btn-danger" @click="remove(item)">
+                        <button class="btn btn-sm btn-danger" @click="remove(item)" title="Remove token">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>

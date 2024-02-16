@@ -34,7 +34,30 @@
                 </tr>
             </tbody>
         </table>
-        <Loading v-else />
+        <div v-if="ban && ban.banId">
+            <h3>Ban details</h3>
+            <table class="table table-striped table-select">
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>{{ ban.banId }}</th>
+                    </tr>
+                    <tr>
+                        <th>BANNED BY</th>
+                        <th>{{ ban.admin.username }}</th>
+                    </tr>
+                    <tr v-if="ban.reason">
+                        <th>REASON</th>
+                        <th>{{ ban.reason }}</th>
+                    </tr>
+                    <tr>
+                        <th>CREATED AT</th>
+                        <th>{{ new Date(ban.createdAt).toLocaleString('sr') }}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <Loading v-if="!data" />
     </div>
 </template>
 
@@ -42,6 +65,7 @@
 import Loading from '@/components/Loading.vue';
 import Navigation from '@/components/Navigation.vue';
 import { useLogout } from '@/hooks/logout.hook';
+import { BanModel } from '@/models/ban.model';
 import { DataModel } from '@/models/data.model';
 import { MainService } from '@/utils/main.service';
 import { ref } from 'vue';
@@ -51,9 +75,17 @@ const route = useRoute()
 const id = Number.parseInt(route.params.id as string)
 
 const data = ref<DataModel>()
+const ban = ref<BanModel>()
 const logout = useLogout()
 
 MainService.getDataById(id)
-    .then(rsp => data.value = rsp.data)
+    .then(rsp => {
+        data.value = rsp.data
+        MainService.getBanByUserId(rsp.data.user.userId)
+            .then(brsp => ban.value = brsp.data)
+            .catch(e => console.log('No ban found'))
+    })
     .catch(e => logout())
+
+
 </script>

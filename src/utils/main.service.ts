@@ -133,4 +133,12 @@ export class MainService {
     public static async deleteBan(id: number) {
         return await this.useAxios('/ban/' + id, 'delete')
     }
+
+    public static async getBanByUserId(id: number) {
+        return await this.useAxios('/ban/user/' + id)
+    }
+
+    public static async getDataByUserId(id: number) {
+        return await this.useAxios('/data/user/' + id)
+    }
 }

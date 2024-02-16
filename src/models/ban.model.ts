@@ -6,6 +6,9 @@ export interface BanModel {
         discordId: string
         createdAt: string
     }
+    admin: {
+        username: string
+    }
     reason: string | null
     createdAt: Date
 }

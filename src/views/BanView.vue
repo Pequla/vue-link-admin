@@ -14,6 +14,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">DISCORD</th>
+                <th scope="col">ADMIN</th>
                 <th scope="col">REASON</th>
                 <th scope="col">CREATED AT</th>
                 <th scope="col">ACTIONS</th>
@@ -22,15 +23,16 @@
         <tbody>
             <tr v-for="item in data">
                 <th scope="row">{{ item.banId }}</th>
-                <td>{{ item.user.discordId }} </td>
+                <td>{{ item.user.discordId }}</td>
+                <td>{{ item.admin.username }}</td>
                 <td>{{ (item.reason) ? item.reason : 'N/A' }}</td>
                 <td>{{ new Date(item.createdAt).toLocaleString('sr') }}</td>
                 <td>
                     <div class="btn-group">
-                        <router-link class="btn btn-sm btn-primary" :to="`/details/${item.userId}`">
+                        <button class="btn btn-sm btn-primary" @click="details(item)" title="Details">
                             <i class="fa-solid fa-circle-info"></i>
-                        </router-link>
-                        <button class="btn btn-sm btn-danger" @click="remove(item)">
+                        </button>
+                        <button class="btn btn-sm btn-danger" @click="remove(item)" title="Remove the ban (Pardon user)">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -48,8 +50,10 @@ import { useLogout } from '@/hooks/logout.hook';
 import { MainService } from '@/utils/main.service';
 import { BanModel } from '@/models/ban.model'
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const logout = useLogout()
+const router = useRouter()
 const data = ref<BanModel[]>();
 MainService.getBans()
     .then(rsp => data.value = rsp.data)
@@ -61,5 +65,11 @@ function remove(item: BanModel) {
             .then(rsp => data.value = data.value?.filter(data => data.banId != rsp.data.banId))
             .catch(e => logout())
     }
+}
+
+function details(item: BanModel) {
+    MainService.getDataByUserId(item.userId)
+        .then(rsp => router.push({ path: '/details/' + rsp.data.dataId }))
+        .catch(e => logout())
 }
 </script>
