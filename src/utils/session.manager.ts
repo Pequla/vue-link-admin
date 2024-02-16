@@ -1,13 +1,13 @@
-import { TokenModel } from "@/models/token.model";
+import { AuthModel } from "@/models/auth.model";
 
 export class SessionManager {
-    public static saveAuth(model: TokenModel) {
-        sessionStorage.clear()
-        sessionStorage.setItem('auth', JSON.stringify(model))
+    public static saveAuth(model: AuthModel) {
+        localStorage.clear()
+        localStorage.setItem('auth', JSON.stringify(model))
     }
 
-    private static getAuth(): TokenModel {
-        const ss = sessionStorage.getItem('auth')
+    private static getAuth(): AuthModel {
+        const ss = localStorage.getItem('auth')
         if (ss == undefined) throw new Error('NO_LOGIN_DATA')
         return JSON.parse(ss)
     }
@@ -21,13 +21,13 @@ export class SessionManager {
     }
 
     public static hasAuth() {
-        if (sessionStorage.getItem('auth')) {
+        if (localStorage.getItem('auth')) {
             return true
         }
         return false
     }
 
     public static clearAuth() {
-        sessionStorage.clear()
+        localStorage.clear()
     }
 }

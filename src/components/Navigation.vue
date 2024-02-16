@@ -15,7 +15,10 @@
                         <router-link class="nav-link" to="/token">Tokens</router-link>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" @click="logout">Logout</button>
+                        <router-link class="nav-link" to="/ban">Bans</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" @click="confirmLogout">Logout</button>
                     </li>
                 </ul>
                 <span class="navbar-text">
@@ -39,4 +42,10 @@ const logout = useLogout()
 MainService.getSelf()
     .then(rsp => admin.value = rsp.data)
     .catch(e => logout())
+
+function confirmLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+        logout()
+    }
+}
 </script>

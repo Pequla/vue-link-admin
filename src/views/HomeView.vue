@@ -31,6 +31,9 @@
               <a class="btn btn-sm btn-success" :href="`https://datavue.pequla.com/user/${item.user.discordId}`">
                 <i class="fa-solid fa-right-from-bracket"></i>
               </a>
+              <button class="btn btn-sm btn-secondary" @click="ban(item)">
+                <i class="fa-solid fa-gavel"></i>
+              </button>
               <button class="btn btn-sm btn-danger" @click="remove(item)">
                 <i class="fa-solid fa-trash"></i>
               </button>
@@ -73,6 +76,18 @@ function remove(item: DataModel) {
       .then(rsp => {
         data.value = data.value?.filter(data => data.dataId != rsp.data.dataId)
         cached = cached?.filter(data => data.dataId != rsp.data.dataId)
+      })
+      .catch(e => logout())
+  }
+}
+
+function ban(item: DataModel) {
+  if (confirm('Are you sure you want to ban ' + item.user.discordId)) {
+    let reason = prompt('Reason (can be empty) why are you banning ' + item.user.discordId)
+    MainService.createBan(item.userId, reason)
+    .then(rsp => {
+        data.value = data.value?.filter(data => data.userId != rsp.data.userId)
+        cached = cached?.filter(data => data.userId != rsp.data.userId)
       })
       .catch(e => logout())
   }

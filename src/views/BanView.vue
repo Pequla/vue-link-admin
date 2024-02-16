@@ -5,31 +5,31 @@
             <li class="breadcrumb-item">
                 <router-link to="/">Home</router-link>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Tokens</li>
+            <li class="breadcrumb-item active" aria-current="page">Bans</li>
         </ol>
     </nav>
-    <h3>Application Tokens</h3>
-    <button class="btn btn-sm btn-outline-success mb-3" @click="create">
-        <i class="fa-solid fa-plus"></i> Create a token
-    </button>
+    <h3>User Bans</h3>
     <table class="table table-stripped table-hover" v-if="data">
         <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">VALUE</th>
+                <th scope="col">DISCORD</th>
+                <th scope="col">REASON</th>
                 <th scope="col">CREATED AT</th>
-                <th scope="col">USED AT</th>
                 <th scope="col">ACTIONS</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="item in data">
-                <th scope="row">{{ item.tokenId }}</th>
-                <td>{{ item.value }}</td>
+                <th scope="row">{{ item.banId }}</th>
+                <td>{{ item.user.discordId }} </td>
+                <td>{{ (item.reason) ? item.reason : 'N/A' }}</td>
                 <td>{{ new Date(item.createdAt).toLocaleString('sr') }}</td>
-                <td>{{ (item.usedAt) ? new Date(item.usedAt).toLocaleString('sr') : 'N/A' }}</td>
                 <td>
                     <div class="btn-group">
+                        <router-link class="btn btn-sm btn-primary" :to="`/details/${item.userId}`">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </router-link>
                         <button class="btn btn-sm btn-danger" @click="remove(item)">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -45,26 +45,20 @@
 import Navigation from '@/components/Navigation.vue';
 import Loading from '@/components/Loading.vue';
 import { useLogout } from '@/hooks/logout.hook';
-import { TokenModel } from '@/models/token.model'
-import { MainService } from '@/utils/main.service'
+import { MainService } from '@/utils/main.service';
+import { BanModel } from '@/models/ban.model'
 import { ref } from 'vue';
 
 const logout = useLogout()
-const data = ref<TokenModel[]>();
-MainService.getTokens()
+const data = ref<BanModel[]>();
+MainService.getBans()
     .then(rsp => data.value = rsp.data)
     .catch(e => logout())
 
-function create() {
-    MainService.createToken()
-        .then(rsp => data.value?.push(rsp.data))
-        .catch(e => logout())
-}
-
-function remove(item: TokenModel) {
-    if (confirm('You will delete the token ' + item.tokenId)) {
-        MainService.deleteToken(item.tokenId)
-            .then(rsp => data.value = data.value?.filter(data => data.tokenId != rsp.data.tokenId))
+function remove(item: BanModel) {
+    if (confirm('You will delete the ban ' + item.banId)) {
+        MainService.deleteBan(item.banId)
+            .then(rsp => data.value = data.value?.filter(data => data.banId != rsp.data.banId))
             .catch(e => logout())
     }
 }

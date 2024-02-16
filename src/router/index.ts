@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import DetailsView from '@/views/DetailsView.vue'
 import TokenView from '@/views/TokenView.vue'
+import BanView from '@/views/BanView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -24,6 +25,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/token',
     name: 'token',
     component: TokenView
+  },
+  {
+    path: '/ban',
+    name: 'ban',
+    component: BanView
   },
   {
     path: '/:catchAll(.*)',

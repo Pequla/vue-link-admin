@@ -1,4 +1,6 @@
 export interface TokenModel {
-    access: string
-    refresh: string
+    tokenId: number,
+    value: string,
+    createdAt: string,
+    usedAt: string
 }

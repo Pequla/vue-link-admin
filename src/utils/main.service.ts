@@ -118,4 +118,19 @@ export class MainService {
     public static async deleteToken(id: number) {
         return await this.useAxios('/token/' + id, 'delete')
     }
+
+    public static async getBans() {
+        return await this.useAxios('/ban')
+    }
+
+    public static async createBan(id: number, reason: string | null) {
+        return await this.useAxios('/ban', 'post', {
+            id: id,
+            reason: reason
+        })
+    }
+
+    public static async deleteBan(id: number) {
+        return await this.useAxios('/ban/' + id, 'delete')
+    }
 }
